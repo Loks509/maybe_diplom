@@ -6,7 +6,7 @@
 const double pi = acos(-1);
 const double  k0 = 1, k1 = 1.5 * k0;
 
-int n = 5, N = n * n;
+int n = 2, N = n * n;
 
 double R = 5;
 double lambda = 1;
@@ -155,8 +155,8 @@ int main1()
     return 0;
 }
 
-int main() {
-
+int main2() {
+    return 0;
     double **a = createm<double>(N, N + 1.0), **a1 = createm<double>(N, N + 1.0);
 
     mg(a, 2.0, 2);
@@ -208,15 +208,15 @@ int main() {
 
 }
 
-int main3() {
-    return 0;
+int main() {
+    //return 0;
     N *= n;
     double** a = createm<double>(N, N + 1.0), **b = createm<double>(N, N + 1.0);
 
     mg(a, 2.0, 3); 
     mg(b, 2.0, 3);
-    print(a, "g");
-    space(1);
+    //print(a, "g");
+    //space(1);
     printf("cond: %f\n", cond(a));
 
     gm(a);

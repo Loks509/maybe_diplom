@@ -231,7 +231,8 @@ type_simple_iteration* simple_iteration(type_simple_iteration** var = 0, type_si
     }
 }
 
-template<class type_matrix_del>
+
+template<typename type_matrix_del>
 void del(type_matrix_del**& var) {
     //очистка памяти указателя var
     size_t M = _msize(var) / sizeof(var[0]);
@@ -240,12 +241,11 @@ void del(type_matrix_del**& var) {
     free(var);
 }
 
-template<class type_vector_del>
-void del(double*& var) {
+template<typename type_vector_del>
+void del(type_vector_del*& var) {
     //очистка памяти указателя var
     free(var);
 }
-
 
 //ниже возможно ошибки
 
@@ -281,14 +281,13 @@ void LU(type_LU** var, type_LU**& L, type_LU**& U) {
 }
 
 template<class type_mult>
-inline type_mult** mult(type_mult** var1, type_mult** var2) {
+inline void mult(type_mult** var1, type_mult** var2, type_mult**& res) {
     size_t M = _msize(var1) / sizeof(var1[0]);
     size_t N = _msize(var1[0]) / sizeof(var1[0][0]);
 
-    type_mult** res = createm<type_mult>(M, N);
     for (size_t i = 0; i < M; i++)
     {
-        for (size_t j = 0; j < M; j++)
+        for (size_t j = 0; j < N; j++)
         {
             type_mult sum = 0;
             for (size_t k = 0; k < M; k++)
@@ -298,25 +297,23 @@ inline type_mult** mult(type_mult** var1, type_mult** var2) {
             res[i][j] = sum;
         }
     }
-    return res;
 }
 
 template<class type_diag>
 type_diag** diag(type_diag** var) {
     size_t M = _msize(var) / sizeof(var[0]);
 
-
     type_diag** var_D = createm<type_diag>(M, M), ** var_L = createm<type_diag>(M, M), ** var_U = createm<type_diag>(M, M);
 
     LU(var, var_L, var_U);
-    var_D = mult(var_U, var_L);
+    mult(var_U, var_L,var_D);
 
     for (size_t k = 1; k <= 10; k++) {
         LU(var_D, var_L, var_U);
-        var_D = mult(var_U, var_L);
+        mult(var_U, var_L, var_D);
     }
-    //free(var_U); free(var_L);
 
+    del(var_L); del(var_U);
     for (size_t i = 0; i < M; i++)
     {
         for (size_t j = 0; j < M; j++)
@@ -335,6 +332,7 @@ type_eigenvalues* eigenvalues(type_eigenvalues** var) {
     for (size_t i = 0; i < M; i++)
         res[i] = var_D[i][i];
 
+    del(var_D);
     return res;
 }
 
@@ -352,7 +350,7 @@ type_cond cond(type_cond** var) {
         if (abs(var1[i]) <= max) min = abs(var1[i]);
     }
 
+    del(var1);
     return max / min;
 }
-
 #endif MATRIX_H
