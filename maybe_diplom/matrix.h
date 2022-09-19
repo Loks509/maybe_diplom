@@ -153,9 +153,12 @@ string gm(type_gm**& var) {
     if (M + 1 != N) return "Error";
 
     for (size_t k = 0; k < M; k++) {
-       /* if (k == 0) printf("\nk=%i\n", k);
-        if (k != 0) printf("k=%i\n", k);
-        fflush(stdout);*/
+
+        if (k % 100 == 0 && k != 0)
+        {
+            printf("gm k=%d\n", k);
+            //fflush(stdout);
+        }
         type_gm ed = 1;
         if (var[k][k] != ed) {
             type_gm T = var[k][k];
@@ -197,6 +200,8 @@ template<class type_simple_iteration>
 type_simple_iteration* simple_iteration(type_simple_iteration** var = 0, type_simple_iteration* init_approx = 0, size_t k = 0)
 {
     size_t M = _msize(var) / sizeof(var[0]);
+    printf("simple iteration M: %d\n", M);
+
     type_simple_iteration* res = createv<type_simple_iteration>(M);
     size_t k_ind = 0;
     while (true) {
@@ -204,6 +209,10 @@ type_simple_iteration* simple_iteration(type_simple_iteration** var = 0, type_si
         k_ind++;
         for (size_t i = 0; i < M; i++)
         {
+            if (i % 100 == 0 && i != 0)
+            {
+                printf("simple iteration i=%d\n", i);
+            }
             if (var[i][i] > 0) {
                 for (size_t j = 0; j < M; j++)
                 {
@@ -230,7 +239,6 @@ type_simple_iteration* simple_iteration(type_simple_iteration** var = 0, type_si
         }
     }
 }
-
 
 template<typename type_matrix_del>
 void del(type_matrix_del**& var) {

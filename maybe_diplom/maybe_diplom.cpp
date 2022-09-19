@@ -6,7 +6,7 @@
 const double pi = acos(-1);
 const double  k0 = 1, k1 = 1.5 * k0;
 
-int n = 2, N = n * n;
+int n = 10, N = n * n;
 
 double R = 5;
 double lambda = 1;
@@ -118,9 +118,9 @@ void mg(double**& var, size_t type, size_t dim_s = 1) {
                 double o = C + j2 * h2, p = o + h2;
                 double q = E + j3 * h3, s = q + h3;
 
-                var[j][i] = h1 * h2 * h3 * base_func(i, j) * (type - 1.0) - lambda * I<double>(3, k, a, b, c, d, e, f, g, l, o, p, q, s);
+                var[j][i] = h1 * h2 * h3 * base_func(i, j) * (type - 1.0) - lambda * I<double>(1, k, a, b, c, d, e, f, g, l, o, p, q, s);
             }
-            var[i][M] = I<double>(3, func, a, b, c, d, e, f);
+            var[i][M] = I<double>(1, func, a, b, c, d, e, f);
         }
     }
 }
